@@ -31,12 +31,14 @@ public class JwtAuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) throws Exception {
         authenticate(req.getUsername(), req.getPassword());
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(req.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(req.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
     private void authenticate(String username, String password) throws Exception {
+        System.out.println(username);
+        System.out.println(password);
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
